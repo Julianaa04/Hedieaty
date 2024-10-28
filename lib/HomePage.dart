@@ -8,6 +8,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Map<String, dynamic>> friends = [
     {
+      'name': 'Yoyo',
+      'profilePic': "assets/boy.png",
+      'events': ['Graduation Ceremony', 'Ta7weel Ceremony']
+    },
+    {
       'name': 'Mariam',
       'profilePic': 'assets/images.png',
       'events': ['Birthday Party', 'Wedding'],
@@ -16,6 +21,11 @@ class _HomePageState extends State<HomePage> {
       'name': 'Tina',
       'profilePic': 'assets/girl1.jpg',
       'events': ['Housewarming Party'],
+    },
+    {
+      'name': 'Donia',
+      'profilePic': 'assets/girl2.webp',
+      'events': ['Graduation Ceremony', 'Championship'],
     },
     {
       'name': 'Mario',

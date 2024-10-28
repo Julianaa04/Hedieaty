@@ -13,6 +13,14 @@ class _ProfilePage extends State<ProfilePage> {
 
   bool _isEditing = false;
 
+  final List<Map<String, dynamic>> gifts = [
+    {'name': 'Book', 'event': 'Education Event', 'status': 'Available', 'pledged': false, 'icon': Icons.book},
+    {'name': 'Car', 'event': 'Graduation', 'status': 'Available', 'pledged': false, 'icon': Icons.directions_car},
+    {'name': 'Watch', 'event': 'Birthday Party', 'status': 'Pledged', 'pledged': true, 'icon': Icons.watch},
+    {'name': 'iPhone 16', 'event': 'Senior Year', 'status': 'Available', 'pledged': false, 'icon': Icons.phone_iphone},
+    {'name': 'Flowers', 'event': 'Engagement', 'status': 'Pledged', 'pledged': true, 'icon': Icons.local_florist},
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -31,14 +39,14 @@ class _ProfilePage extends State<ProfilePage> {
           CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
-                expandedHeight: 450,
+                expandedHeight: 600,
                 backgroundColor: Colors.black,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/profile.jpg'),
+                        image: AssetImage('assets/myProfile.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -69,8 +77,7 @@ class _ProfilePage extends State<ProfilePage> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Enter Name',
-                                hintStyle: TextStyle(
-                                    color: Colors.white60),
+                                hintStyle: TextStyle(color: Colors.white60),
                               ),
                             )
                                 : Text(
@@ -96,7 +103,7 @@ class _ProfilePage extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 20),
+                        SizedBox(height:5),
                         Row(
                           children: [
                             Text(
@@ -131,7 +138,6 @@ class _ProfilePage extends State<ProfilePage> {
                           ],
                         ),
                         SizedBox(height: 20),
-
                         Row(
                           children: [
                             Icon(Icons.cake, color: Colors.white60),
@@ -156,8 +162,6 @@ class _ProfilePage extends State<ProfilePage> {
                           ],
                         ),
                         SizedBox(height: 20),
-
-                        // Phone Number Row
                         Row(
                           children: [
                             Icon(Icons.phone, color: Colors.white60),
@@ -169,8 +173,7 @@ class _ProfilePage extends State<ProfilePage> {
                                 style: TextStyle(color: Colors.white),
                                 decoration: InputDecoration(
                                   hintText: "Enter Phone Number",
-                                  hintStyle:
-                                  TextStyle(color: Colors.white60),
+                                  hintStyle: TextStyle(color: Colors.white60),
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -182,8 +185,6 @@ class _ProfilePage extends State<ProfilePage> {
                           ],
                         ),
                         SizedBox(height: 10),
-
-                        // Email Row
                         Row(
                           children: [
                             Icon(Icons.email_rounded, color: Colors.white60),
@@ -195,8 +196,7 @@ class _ProfilePage extends State<ProfilePage> {
                                 style: TextStyle(color: Colors.white),
                                 decoration: InputDecoration(
                                   hintText: "Enter Email",
-                                  hintStyle:
-                                  TextStyle(color: Colors.white60),
+                                  hintStyle: TextStyle(color: Colors.white60),
                                   border: InputBorder.none,
                                 ),
                               ),
@@ -207,20 +207,47 @@ class _ProfilePage extends State<ProfilePage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
 
-                        // Toggle Edit/Save Button
+                        SizedBox(height: 40),
+                        Text(
+                          "Your Events and Gifts",
+                          style: TextStyle(
+                              color: Colors.purple[200],
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: gifts.length,
+                          itemBuilder: (context, index) {
+                            final gift = gifts[index];
+                            return Card(
+                              color: Colors.black87,
+                              margin: EdgeInsets.symmetric(vertical: 8),
+                              child: ListTile(
+                                leading: Icon(gift['icon'], color: Colors.purple[200]),
+                                title: Text(
+                                  gift['event'],
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(
+                                  '${gift['name']} - ${gift['pledged'] ? 'Pledged' : 'Available'}',
+                                  style: TextStyle(color: Colors.grey[400]),
+                                ),
+                                trailing: Icon(
+                                  gift['pledged'] ? Icons.check_circle : Icons.radio_button_unchecked,
+                                  color: gift['pledged'] ? Colors.purple : Colors.grey,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 20),
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() {
-                                if (_isEditing) {
-                                  // Save logic can be added here
-                                  print("Name: ${_nameController.text}");
-                                  print("Phone: ${_phoneController.text}");
-                                  print("Email: ${_emailController.text}");
-                                  print("Age: ${_ageController.text}");
-                                }
                                 _isEditing = !_isEditing;
                               });
                             },
