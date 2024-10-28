@@ -9,180 +9,193 @@ class _GiftListPageState extends State<GiftListPage> {
   List<Map<String, dynamic>> gifts = [
     {
       'name': 'Book',
-      'category': 'Education',
+      'event': 'Education Event',
       'status': 'Available',
       'pledged': false,
       'icon': Icons.book,
     },
     {
-      'name': 'Watch',
-      'category': 'Accessory',
-      'status': 'Pledged',
-      'pledged': true,
-      'icon': Icons.access_alarm,
-    },
-    {
-      'name': 'Toy',
-      'category': 'Kids',
+      'name': 'Car',
+      'event': 'Graduation',
       'status': 'Available',
       'pledged': false,
-      'icon': Icons.toys,
+      'icon': Icons.directions_car,
+    },
+    {
+      'name': 'Watch',
+      'event': 'Birthday Party',
+      'status': 'Pledged',
+      'pledged': true,
+      'icon': Icons.watch,
+    },
+    {
+      'name': 'iPhone 16',
+      'event': 'Senior Year',
+      'status': 'Available',
+      'pledged': false,
+      'icon': Icons.phone_iphone,
     },
     {
       'name': 'Flowers',
-      'category': 'Decoration',
+      'event': 'Engagement',
       'status': 'Available',
-      'pledged': false,
+      'pledged': true,
       'icon': Icons.local_florist,
     },
   ];
 
-  String sortBy = 'name';
+  void _sortEvents(String criterion) {
+    setState(() {
+      gifts.sort((a, b) => a[criterion].compareTo(b[criterion]));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Sort gifts based on selected criteria
-    gifts.sort((a, b) => a[sortBy].compareTo(b[sortBy]));
-
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Gift List'),
+        title: Text(
+          'Gift List',
+          style: TextStyle(
+            color: Colors.purple[200],
+            fontFamily: 'IndieFlower',
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(
+          color: Colors.purple[200],
+        ),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: _addGift, // Placeholder function
+          PopupMenuButton<String>(
+            onSelected: _sortEvents,
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(value: 'name', child: Text('Sort by Name')),
+                PopupMenuItem(value: 'category', child: Text('Sort by Category')),
+                PopupMenuItem(value: 'status', child: Text('Sort by Status')),
+              ];
+            },
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Sort Dropdown
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<String>(
-              value: sortBy,
-              onChanged: (String? newValue) {
-                setState(() {
-                  sortBy = newValue!;
-                });
-              },
-              items: <String>['name', 'category', 'status']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text('Sort by ${value[0].toUpperCase()}${value.substring(1)}'),
-                );
-              }).toList(),
-            ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1.0,
           ),
-          // Gift Grid Layout
-          Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.all(8),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                childAspectRatio: 0.8,
-              ),
-              itemCount: gifts.length,
-              itemBuilder: (context, index) {
-                final gift = gifts[index];
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+          itemCount: gifts.length,
+          itemBuilder: (context, index) {
+            final gift = gifts[index];
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/gift.png"),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  color: gift['pledged'] ? Colors.green[100] : Colors.white,
-                  elevation: 4,
+                ),
+                if (gift['pledged'])
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.lightGreenAccent,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'Pledged',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                Positioned(
+                  top: 40,
+                  child: Text(
+                    gift['name'],
+                    style: TextStyle(
+                      color: Colors.black38,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      shadows: [Shadow(offset: Offset(1.5, 1.5), color: Colors.purple)],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Positioned(
+                  bottom: 40,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Gift name at the top in a decorated container
-                      Container(
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            topRight: Radius.circular(15),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            gift['name'],
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
+                      Text(
+                        'Event: ${gift['event']}',
+                        style: TextStyle(color: Colors.black38, fontSize: 13, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(gift['icon'], size: 40, color: Colors.blue),
-                              SizedBox(height: 8),
-                              Text(
-                                'Category: ${gift['category']}',
-                                style: TextStyle(color: Colors.grey[600]),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'Status: ${gift['status']}',
-                                style: TextStyle(color: Colors.grey[600]),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
+                      Text(
+                        'Status: ${gift['pledged'] ? 'Pledged' : gift['status']}',
+                        style: TextStyle(color: Colors.black38, fontSize: 13,fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
                       ),
-                      if (!gift['pledged']) ...[
-                        Divider(height: 1, color: Colors.grey[300]),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.edit, color: Colors.blue),
-                                onPressed: () => _editGift(index), // Placeholder function
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => _deleteGift(index), // Placeholder function
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                ),
+                if (!gift['pledged'])
+                  Positioned(
+                    bottom: 6,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.purple[200]),
+                          onPressed: () => _editGift(index),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.black38),
+                          onPressed: () => _deleteGift(index),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){Navigator.pushNamed(context, '/route5');},
+        child: Icon(Icons.add),
+        backgroundColor: Colors.purple[200],
       ),
     );
   }
 
-  // Placeholder function for adding a gift
   void _addGift() {
-    // Functionality to add a gift will go here
   }
 
-  // Placeholder function for editing a gift
   void _editGift(int index) {
-    // Functionality to edit a gift will go here
   }
 
-  // Placeholder function for deleting a gift
   void _deleteGift(int index) {
-    // Functionality to delete a gift will go here
+    setState(() {
+      gifts.removeAt(index);
+    });
   }
 }

@@ -11,12 +11,11 @@ class _ProfilePage extends State<ProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
 
-  bool _isEditing = false; // Flag to check if in editing mode
+  bool _isEditing = false;
 
   @override
   void initState() {
     super.initState();
-    // Set initial values for profile fields (replace with real user data)
     _nameController.text = "Joliana Emad";
     _phoneController.text = "01210370304";
     _emailController.text = "juliana.ata1593@gmail.com";

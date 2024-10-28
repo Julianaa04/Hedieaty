@@ -10,12 +10,17 @@ class _HomePageState extends State<HomePage> {
     {
       'name': 'Mariam',
       'profilePic': 'assets/images.png',
-      'events': ['Birthday Party', 'Wedding Gift List'],
+      'events': ['Birthday Party', 'Wedding'],
     },
     {
       'name': 'Tina',
       'profilePic': 'assets/girl1.jpg',
       'events': ['Housewarming Party'],
+    },
+    {
+      'name': 'Mario',
+      'profilePic': 'assets/boy.png',
+      'events': ['Graduation Ceremony' , 'Engagement' , 'Match' , 'Birthday'],
     },
     {
       'name': 'Yara',
@@ -29,42 +34,12 @@ class _HomePageState extends State<HomePage> {
     },
   ];
 
-  List<Map<String, dynamic>> filteredFriends = []; // List to store filtered friends
-  TextEditingController searchController = TextEditingController(); // Controller for the search field
-  bool isSearching = false;
-
-  @override
-  void initState() {
-    super.initState();
-    filteredFriends = friends; // Initially show all friends
-  }
-
-  void _filterFriends(String query) {
-    setState(() {
-      filteredFriends = friends
-          .where((friend) =>
-          friend['name'].toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white12,
       appBar: AppBar(
-        title: isSearching
-            ? TextField(
-          controller: searchController,
-          onChanged: _filterFriends,
-          style: TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: 'Search Friends...',
-            hintStyle: TextStyle(color: Colors.white54),
-            border: InputBorder.none,
-          ),
-        )
-            : Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Image.asset(
@@ -84,17 +59,12 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.purple[200]),
         actions: [
+
           IconButton(
-            icon: Icon(isSearching ? Icons.clear : Icons.search),
+            icon: Icon(Icons.search),
             onPressed: () {
-              setState(() {
-                isSearching = !isSearching; // Toggle search state
-                if (!isSearching) {
-                  searchController.clear(); // Clear the search when not searching
-                  filteredFriends = friends; // Reset to original list
-                }
-              });
             },
           ),
         ],
@@ -119,9 +89,9 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
-              itemCount: filteredFriends.length,
+              itemCount: friends.length,
               itemBuilder: (context, index) {
-                final friend = filteredFriends[index];
+                final friend = friends[index];
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   padding: EdgeInsets.all(15),
